@@ -1,40 +1,41 @@
 # 작업시간 관리 (Work Tracker)
 
-간단한 데스크탑 작업 시간 관리 앱입니다. Python + Tkinter로 작성되었으며, 세션을 SQLite에 저장하고 휴식 알림(Windows 알림 또는 소리)을 지원 전체 UI는 iOS 스타일의 간결한 테마(ttk 스타일 및 커스텀 토글)를 적용했습니다.
+- 간단한 데스크탑 작업시간 관리 앱입니다. 
+- Python, Tkinter, SQLite
 
+### 주요 기능
+- 메인: 작업시간 타이머와 휴식기능(일시정지)
+- 알림설정: 휴식 알림 온/오프, 간격, 알림방식, 알림음 선택
+- 통계: 일자 별 작업시간, 휴식시간 안내
 
-주요 기능
-- 작업 시작/휴식/재시작/종료 및 세션 저장 (SQLite)
-- 휴식 알림: Windows 토스트(`winotify`) 또는 소리(`pygame`) 선택 가능
-- 설정 화면에서 휴식 알림 온/오프, 간격, 알림 방식 선택
-- 통계 화면의 일자 선택 및 일별 합계 확인
-
-요구 사항
+### 요구사항
 - Python 3.8 이상
 - Windows 권장 (토스트 알림 사용 시)
 - 설치할 패키지:
   - `pygame`
   - `winotify`
 
-설치
+### 설치
 
 ```powershell
 python -m pip install pygame winotify
 ```
 
-실행
+### 실행
 
 ```powershell
 python main.py
 ```
 
-배포
+### 빌드
 ```
 pyinstaller --noconfirm --onedir --windowed --name "workTracker" --add-data "sounds;sounds" --add-data "screens;screens" main.py
-- dist/workTracker 폴더째로 사용
+
+- dist/workTracker 폴더째로 사용, workTracker.exe 파일 실행.
 ```
 
-프로젝트 구조 (주요 파일)
+### 프로젝트 구조
+
 - [main.py](main.py) — 앱 진입점, 윈도우/프레임 초기화, 스케일링 관리
 - [database.py](database.py) — SQLite 연결/초기화 및 설정 저장/조회, `get_daily_totals()` 제공
 - [screens/](screens/) — 화면 및 위젯
@@ -47,5 +48,6 @@ pyinstaller --noconfirm --onedir --windowed --name "workTracker" --add-data "sou
   - [screens/widgets.py](screens/widgets.py) — `IosToggleButton` 커스텀 위젯
 - [sounds/](sounds/) — 알림용 소리 파일(사용자 추가)
 
-데이터베이스
-- 실행 디렉터리에 `work_tracker.db` 파일이 생성됩니다.
+
+### 데이터 관리
+- 실행 디렉터리에 `work_tracker.db` 파일이 생성.
