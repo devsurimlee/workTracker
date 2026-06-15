@@ -6,6 +6,9 @@ from database import (
     set_setting
 )
 
+from screens.header import create_screen_header
+from screens.layout import create_centered_content
+
 
 class ToolTip:
 
@@ -93,47 +96,14 @@ class BreakAlarmScreen(tk.Frame):
         # 상단 헤더
         #
 
-        header = tk.Frame(
+        create_screen_header(
             self,
-            height=60
-        )
-
-        header.pack(
-            fill="x",
-            padx=10,
-            pady=10
-        )
-
-        header.pack_propagate(
-            False
-        )
-
-        title = tk.Label(
-            header,
-            text="휴식알림",
-            font=(
-                "맑은 고딕",
-                20
-            )
-        )
-
-        title.place(
-            relx=0.5,
-            rely=0.5,
-            anchor="center"
-        )
-
-        back_btn = tk.Button(
-            header,
-            text="뒤로가기",
-            command=lambda:
+            "휴식알림",
+            right_text="뒤로가기",
+            right_command=lambda:
                 controller.show_frame(
                     "SettingsScreen"
                 )
-        )
-
-        back_btn.pack(
-            side="right"
         )
 
         divider = tk.Frame(
@@ -145,6 +115,8 @@ class BreakAlarmScreen(tk.Frame):
         divider.pack(
             fill="x"
         )
+
+        content = create_centered_content(self)
 
         #
         # 설정 로드
@@ -178,7 +150,7 @@ class BreakAlarmScreen(tk.Frame):
         #
 
         section1 = tk.Frame(
-            self
+            content
         )
 
         section1.pack(
@@ -228,12 +200,12 @@ class BreakAlarmScreen(tk.Frame):
 
         ToolTip(
             help_btn,
-            "연속 근무 시간이 설정값을 넘으면\n"
+            "연속 작업 시간이 설정값을 넘으면\n"
             "휴식을 권장하는 알림을 표시합니다.\n\n"
             "예)\n"
             "90분 설정\n"
             "↓\n"
-            "90분 연속 근무\n"
+            "90분 연속 작업\n"
             "↓\n"
             "설정한 방식으로 알림"
         )
@@ -263,7 +235,7 @@ class BreakAlarmScreen(tk.Frame):
         #
 
         section2 = tk.Frame(
-            self
+            content
         )
 
         section2.pack(
@@ -313,7 +285,7 @@ class BreakAlarmScreen(tk.Frame):
         #
 
         section3 = tk.Frame(
-            self
+            content
         )
 
         section3.pack(

@@ -17,6 +17,9 @@ from database import (
     get_setting
 )
 
+from screens.header import create_screen_header
+from screens.layout import create_centered_content
+
 
 class MainScreen(tk.Frame):
 
@@ -45,45 +48,20 @@ class MainScreen(tk.Frame):
         
         pygame.mixer.init()
         
-        header = tk.Frame(
+        header, _, _ = create_screen_header(
             self,
-            height=60
+            "작업시간 관리",
+            right_text="설정",
+            right_command=lambda:
+                controller.show_frame(
+                    "SettingsScreen"
+                )
         )
 
-        header.pack(
-            fill="x",
-            pady=(10, 10)
-        )
-
-        header.grid_columnconfigure(
-            0,
-            weight=1
-        )
-
-        header.grid_columnconfigure(
-            1,
-            weight=1
-        )
-
-        header.grid_columnconfigure(
-            2,
-            weight=1
-        )
-        
-        title = tk.Label(
-            header,
-            text="근무시간 관리",
-            font=("맑은 고딕", 20, "bold")
-        )
-
-        title.grid(
-            row=0,
-            column=1
-        )
-
+        content = create_centered_content(self)
 
         self.status_label = tk.Label(
-            self,
+            content,
             text="🔵 대기중",
             font=("맑은 고딕", 16)
         )
@@ -93,7 +71,7 @@ class MainScreen(tk.Frame):
         )
 
         self.timer_label = tk.Label(
-            self,
+            content,
             text="00:00:00",
             font=("맑은 고딕", 32)
         )
@@ -103,7 +81,7 @@ class MainScreen(tk.Frame):
         )
 
         self.today_label = tk.Label(
-            self,
+            content,
             text="오늘 누적: 0시간 0분"
         )
 
@@ -111,7 +89,7 @@ class MainScreen(tk.Frame):
             pady=5
         )
 
-        self.button_frame = tk.Frame(self)
+        self.button_frame = tk.Frame(content)
 
         self.button_frame.pack(
             pady=10
@@ -119,7 +97,7 @@ class MainScreen(tk.Frame):
 
         self.start_btn = tk.Button(
             self.button_frame,
-            text="근무 시작",
+            text="작업 시작",
             width=15,
             command=self.start_work
         )
@@ -133,38 +111,21 @@ class MainScreen(tk.Frame):
 
         self.resume_btn = tk.Button(
             self.button_frame,
-            text="근무 재시작",
+            text="작업 재시작",
             width=15,
             command=self.resume_work
         )
 
         self.stop_btn = tk.Button(
             self.button_frame,
-            text="근무 종료",
+            text="작업 종료",
             width=15,
             command=self.stop_work
         )
         
-        settings_btn = tk.Button(
-            header,
-            text="설정",
-            width=8,
-            command=lambda:
-                controller.show_frame(
-                    "SettingsScreen"
-                )
-        )
-
-        settings_btn.grid(
-            row=0,
-            column=2,
-            sticky="e",
-            padx=10
-)        
-        
         # 개발용 알림
         test_alarm_btn = tk.Button(
-            self,
+            content,
             text="알림 테스트",
             command=self.test_break_alarm
         )
@@ -246,7 +207,7 @@ class MainScreen(tk.Frame):
         )
 
         self.status_label.config(
-            text="🟢 근무중"
+            text="🟢 작업중"
         )
 
         self.update_buttons()
@@ -285,7 +246,7 @@ class MainScreen(tk.Frame):
         self.state = "WORKING"
 
         self.status_label.config(
-            text="🟢 근무중"
+            text="🟢 작업중"
         )
 
         self.update_buttons()
@@ -300,7 +261,7 @@ class MainScreen(tk.Frame):
 
         result = messagebox.askyesno(
             "확인",
-            "근무를 종료하시겠습니까?"
+            "작업을 종료하시겠습니까?"
         )
 
         if not result:
@@ -462,7 +423,7 @@ class MainScreen(tk.Frame):
                     title="휴식 권장",
                     msg=(
                         f"{target_minutes}분 이상 "
-                        "근무 중입니다.\n"
+                        "작업 중입니다.\n"
                         "잠시 휴식을 권장합니다."
                     ),
                     duration="long"

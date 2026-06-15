@@ -13,11 +13,28 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title("근무시간 관리")
-        self.geometry("800x700")
+        self.title("작업시간 관리")
+        self.geometry("480x500")
+        self.minsize(480, 500)
+
+        self._base_scaling = float(self.tk.call("tk", "scaling"))
+        self._current_scale = 1.0
+
+        self.bind(
+            "<Configure>",
+            self.on_window_configure
+        )
 
         container = tk.Frame(self)
         container.pack(fill="both", expand=True)
+        container.grid_rowconfigure(
+            0,
+            weight=1
+        )
+        container.grid_columnconfigure(
+            0,
+            weight=1
+        )
 
         self.frames = {}
 
@@ -51,10 +68,44 @@ class App(tk.Tk):
         self,
         frame_name
     ):
-
-        self.frames[
+        frame = self.frames[
             frame_name
-        ].tkraise()
+        ]
+
+        frame.tkraise()
+
+        if hasattr(
+            frame,
+            "on_show"
+        ):
+            frame.on_show()
+
+    def on_window_configure(
+        self,
+        event
+    ):
+
+        if event.widget is not self:
+            return
+
+        width_scale = event.width / 480
+        height_scale = event.height / 500
+
+        scale = max(
+            1.0,
+            min(width_scale, height_scale)
+        )
+
+        if abs(scale - self._current_scale) < 0.05:
+            return
+
+        self._current_scale = scale
+
+        self.tk.call(
+            "tk",
+            "scaling",
+            self._base_scaling * scale
+        )
 
 
 if __name__ == "__main__":

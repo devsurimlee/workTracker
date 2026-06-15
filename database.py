@@ -81,3 +81,26 @@ def set_setting(key, value):
 
     conn.commit()
     conn.close()
+
+
+def get_daily_totals(date_str):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT
+        COALESCE(SUM(duration_seconds), 0),
+        COALESCE(SUM(break_seconds), 0)
+    FROM sessions
+    WHERE substr(start_time, 1, 10) = ?
+    """, (date_str,))
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    if not row:
+        return 0, 0
+
+    return int(row[0]), int(row[1])

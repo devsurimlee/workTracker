@@ -1,5 +1,8 @@
 import tkinter as tk
 
+from screens.header import create_screen_header
+from screens.layout import create_centered_content
+
 
 class SettingsScreen(tk.Frame):
 
@@ -16,45 +19,14 @@ class SettingsScreen(tk.Frame):
         # 상단 고정 영역
         #
         
-        header = tk.Frame(
+        create_screen_header(
             self,
-            height=60
-        )
-
-        header.pack(
-            fill="x",
-            padx=10,
-            pady=10
-        )
-
-        header.pack_propagate(False)
-
-        title = tk.Label(
-            header,
-            text="설정",
-            font=(
-                "맑은 고딕",
-                20
-            )
-        )
-
-        title.place(
-            relx=0.5,
-            rely=0.5,
-            anchor="center"
-        )
-
-        home_btn = tk.Button(
-            header,
-            text="메인",
-            command=lambda:
+            "설정",
+            right_text="메인",
+            right_command=lambda:
                 controller.show_frame(
                     "MainScreen"
                 )
-        )
-
-        home_btn.pack(
-            side="right"
         )
 
         divider = tk.Frame(
@@ -71,17 +43,14 @@ class SettingsScreen(tk.Frame):
         # 스크롤 영역
         #
 
-        content = tk.Frame(
-            self
-        )
+        content = create_centered_content(self)
 
-        content.pack(
-            fill="both",
-            expand=True
-        )
+        menu_column = tk.Frame(content)
+
+        menu_column.pack()
 
         self.create_menu_item(
-            content,
+            menu_column,
             "휴식알림",
             lambda:
                 controller.show_frame(
@@ -90,7 +59,7 @@ class SettingsScreen(tk.Frame):
         )
 
         self.create_menu_item(
-            content,
+            menu_column,
             "통계",
             lambda:
                 controller.show_frame(
@@ -133,11 +102,7 @@ class SettingsScreen(tk.Frame):
             pady=5
         )
 
-        divider = tk.Frame(
-            parent,
-            height=1,
-            bg="#DDDDDD"
-        )
+        divider = tk.Frame(parent, height=1, bg="#DDDDDD")
 
         divider.pack(
             fill="x"
