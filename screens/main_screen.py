@@ -1,11 +1,12 @@
 import os
-import tkinter as tk
+import sys
+import time
+import pygame
 
+import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
-import time
-import pygame
 from winotify import Notification
 
 from datetime import (
@@ -129,16 +130,17 @@ class MainScreen(tk.Frame):
         )
         
         # 개발용 알림버튼
-        test_alarm_btn = ttk.Button(
-            content,
-            text="알림 테스트",
-            command=self.test_break_alarm,
-            style='Ghost.TButton'
-        )
+        if not getattr(sys, 'frozen', False):
+            test_alarm_btn = ttk.Button(
+                content,
+                text="알림 테스트",
+                command=self.test_break_alarm,
+                style='Ghost.TButton'
+            )
 
-        test_alarm_btn.pack(
-            pady=5
-        )
+            test_alarm_btn.pack(
+                pady=5
+            )
 
 
         self.update_buttons()
@@ -424,7 +426,15 @@ class MainScreen(tk.Frame):
     def _play_alarm_audio(self):
         """DB에 지정된 선택 오디오 파일을 읽어 안전하게 재생하는 내부 함수"""
         selected_sound = get_setting("break_alarm_sound", "complete.mp3")
-        sound_path = os.path.join("sounds", selected_sound)
+
+        if getattr(sys, 'frozen', False):
+            # .exe로 실행된 경우 _internal/sounds 폴더를 바라봅니다.
+            sound_dir = os.path.join(sys._MEIPASS, "sounds")
+        else:
+            # 파이썬 코드로 실행 중인 경우 기존의 루트 sounds 폴더를 바라봅니다.
+            sound_dir = "sounds"
+
+        sound_path = os.path.join(sound_dir, selected_sound)
 
         try:
             if os.path.exists(sound_path):

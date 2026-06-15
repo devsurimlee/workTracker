@@ -30,8 +30,8 @@ python main.py
 
 배포
 ```
--pyinstaller --noconfirm --onedir --windowed --add-data "sounds;sounds" --add-data "screens;screens" main.py
-- dist/main 폴더째로 사용
+pyinstaller --noconfirm --onedir --windowed --name "workTracker" --add-data "sounds;sounds" --add-data "screens;screens" main.py
+- dist/workTracker 폴더째로 사용
 ```
 
 프로젝트 구조 (주요 파일)

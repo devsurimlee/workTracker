@@ -1,6 +1,7 @@
 import tkinter as tk
 import os
 import pygame
+import sys
 from tkinter import ttk
 
 from database import (
@@ -362,7 +363,13 @@ class BreakAlarmScreen(tk.Frame):
         self.sound_rows = {}
         
         # sounds/ 폴더에서 실제 mp3 파일 목록 동적 호출
-        sound_dir = "sounds"
+        if getattr(sys, 'frozen', False):
+            # .exe로 실행된 경우 _internal/sounds 폴더를 바라봅니다.
+            sound_dir = os.path.join(sys._MEIPASS, "sounds")
+        else:
+            # 파이썬 코드로 실행 중인 경우 기존의 루트 sounds 폴더를 바라봅니다.
+            sound_dir = "sounds"
+
         if not os.path.exists(sound_dir):
             os.makedirs(sound_dir)
         mp3_files = [f for f in os.listdir(sound_dir) if f.endswith(".mp3")]
@@ -462,7 +469,16 @@ class BreakAlarmScreen(tk.Frame):
         import os
         import pygame
 
-        sound_path = os.path.join("sounds", selected_sound)
+        ## 여기
+
+        if getattr(sys, 'frozen', False):
+            # .exe로 실행된 경우 _internal/sounds 폴더를 바라봅니다.
+            sound_dir = os.path.join(sys._MEIPASS, "sounds")
+        else:
+            # 파이썬 코드로 실행 중인 경우 기존의 루트 sounds 폴더를 바라봅니다.
+            sound_dir = "sounds"
+
+        sound_path = os.path.join(sound_dir, selected_sound)
 
         try:
             # 1. 기존에 재생 중이던 소리가 있다면 멈춥니다.
