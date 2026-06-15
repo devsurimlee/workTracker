@@ -106,9 +106,19 @@ class BreakAlarmScreen(tk.Frame):
             right_command=self._on_back_click
         )
 
-        # [수정 포인트] 중앙 정렬 함수 대신, 상단 정렬되는 일반 프레임을 생성하여 가로를 채웁니다.
-        content = tk.Frame(self)
-        content.pack(fill="x", expand=False) # expand=False로 위쪽으로 밀착시킵니다.
+        # 1. 내용을 담을 빈 캔버스를 생성하고 마우스 휠 이벤트를 연결합니다.
+        self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0, bg=self.cget("bg"))
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+
+        # 2. 캔버스 내부에 실제 위젯들이 가득 들어찰 content 프레임을 생성합니다.
+        content = tk.Frame(self.canvas, bg=self.cget("bg"))
+        self.canvas_window = self.canvas.create_window((0, 0), window=content, anchor="nw")
+
+        # 3. 항목이 늘어나는 만큼 스크롤 범위를 갱신하고 가로 폭을 꽉 채우도록 설정합니다.
+        content.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+        self.canvas.bind("<Configure>", lambda e: self.canvas.itemconfig(self.canvas_window, width=e.width))
+
 
         #
         # 설정 로드
@@ -137,11 +147,11 @@ class BreakAlarmScreen(tk.Frame):
             )
         )
 
-        # [이 코드 추가] DB에서 알림 소리 파일명 로드 (기본값: levelup.mp3)
+        # [이 코드 추가] DB에서 알림 소리 파일명 로드 (기본값: complete.mp3)
         self.alarm_sound_var = tk.StringVar(
             value=get_setting(
                 "break_alarm_sound",
-                "levelup.mp3"
+                "complete.mp3"
             )
         )
 
@@ -468,3 +478,8 @@ class BreakAlarmScreen(tk.Frame):
                 pygame.mixer.music.play()
         except Exception as e:
             print(f"소리 재생 실패: {e}")
+
+
+    def _on_mousewheel(self, event):
+        """마우스 휠 조작 시 화면이 위아래로 스크롤되도록 제어하는 함수"""
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
