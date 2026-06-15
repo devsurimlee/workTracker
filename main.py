@@ -1,3 +1,5 @@
+import os
+import sys
 import tkinter as tk
 
 from database import initialize_database
@@ -20,6 +22,14 @@ class App(tk.Tk):
         super().__init__()
 
         self.title("작업시간 관리")
+
+        if hasattr(sys, '_MEIPASS'):
+            icon_path = os.path.join(sys._MEIPASS, "favicon.ico")
+        else:
+            icon_path = os.path.join(os.path.abspath("."), "favicon.ico")
+
+        self.iconbitmap(icon_path)
+
         # apply app-wide theme (fonts, ttk styles)
         apply_theme(self)
         self.geometry(f"{BASE_WINDOW_WIDTH}x{BASE_WINDOW_HEIGHT}")

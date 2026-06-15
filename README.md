@@ -29,7 +29,7 @@ python main.py
 
 ### 빌드
 ```
-pyinstaller --noconfirm --onedir --windowed --name "workTracker" --add-data "sounds;sounds" --add-data "screens;screens" main.py
+pyinstaller --noconfirm --onedir --windowed --name "workTracker" --add-data "sounds;sounds" --add-data "screens;screens" --add-data "favicon.ico;." --icon="favicon.ico" main.py
 
 - dist/workTracker 폴더째로 사용, workTracker.exe 파일 실행.
 ```
