@@ -8,6 +8,7 @@ from database import (
 
 from screens.header import create_screen_header
 from screens.layout import create_centered_content
+from screens.widgets import IosToggleButton 
 
 
 class ToolTip:
@@ -106,15 +107,15 @@ class BreakAlarmScreen(tk.Frame):
                 )
         )
 
-        divider = tk.Frame(
-            self,
-            height=1,
-            bg="#CCCCCC"
-        )
+        # divider = tk.Frame(
+        #     self,
+        #     height=1,
+        #     bg="#CCCCCC"
+        # )
 
-        divider.pack(
-            fill="x"
-        )
+        # divider.pack(
+        #     fill="x"
+        # )
 
         content = create_centered_content(self)
 
@@ -203,18 +204,17 @@ class BreakAlarmScreen(tk.Frame):
             "연속 작업 시간이 설정값을 넘으면\n"
             "휴식을 권장하는 알림을 표시합니다.\n\n"
             "예)\n"
-            "90분 설정\n"
-            "↓\n"
-            "90분 연속 작업\n"
-            "↓\n"
-            "설정한 방식으로 알림"
+            "90분 설정 → 90분 마다 알림\n"
         )
 
-        toggle = ttk.Checkbutton(
+        # use custom iOS-style toggle button
+        toggle = IosToggleButton(
             section1,
-            variable=self.enabled_var,
-            command=self.save_settings
+            command=lambda val: self._on_toggle(val)
         )
+
+        # initialize state from stored setting
+        toggle.set_state(self.enabled_var.get())
 
         toggle.pack(
             side="right"
@@ -351,3 +351,9 @@ class BreakAlarmScreen(tk.Frame):
             "break_alarm_type",
             self.alarm_type_var.get()
         )
+
+    def _on_toggle(self, is_on):
+
+        # keep BooleanVar in sync and persist change
+        self.enabled_var.set(bool(is_on))
+        self.save_settings()

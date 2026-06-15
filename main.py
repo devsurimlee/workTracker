@@ -6,6 +6,12 @@ from screens.main_screen import MainScreen
 from screens.settings_screen import SettingsScreen
 from screens.break_alarm_screen import BreakAlarmScreen
 from screens.statistics_screen import StatisticsScreen
+from screens.theme import apply_theme
+from screens import theme
+
+
+BASE_WINDOW_WIDTH = theme.BASE_WINDOW_WIDTH
+BASE_WINDOW_HEIGHT = theme.BASE_WINDOW_HEIGHT
 
 
 class App(tk.Tk):
@@ -14,8 +20,10 @@ class App(tk.Tk):
         super().__init__()
 
         self.title("작업시간 관리")
-        self.geometry("480x500")
-        self.minsize(480, 500)
+        # apply app-wide theme (fonts, ttk styles)
+        apply_theme(self)
+        self.geometry(f"{BASE_WINDOW_WIDTH}x{BASE_WINDOW_HEIGHT}")
+        self.minsize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT)
 
         self._base_scaling = float(self.tk.call("tk", "scaling"))
         self._current_scale = 1.0
@@ -88,8 +96,8 @@ class App(tk.Tk):
         if event.widget is not self:
             return
 
-        width_scale = event.width / 480
-        height_scale = event.height / 500
+        width_scale = event.width / BASE_WINDOW_WIDTH
+        height_scale = event.height / BASE_WINDOW_HEIGHT
 
         scale = max(
             1.0,

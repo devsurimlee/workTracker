@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 from datetime import (
     datetime,
@@ -37,12 +38,14 @@ class StatisticsScreen(tk.Frame):
                 )
         )
 
-        content = create_centered_content(self)
-
-        body = tk.Frame(
-            content
+        # Use full-width content area (disable vertical centering)
+        content = tk.Frame(self)
+        content.pack(
+            fill="both",
+            expand=True
         )
 
+        body = tk.Frame(content)
         body.pack(
             fill="both",
             expand=True
@@ -85,11 +88,12 @@ class StatisticsScreen(tk.Frame):
             column=1
         )
 
-        today_btn = tk.Button(
+        today_btn = ttk.Button(
             month_header,
             text="Today",
             width=8,
-            command=self.go_today
+            command=self.go_today,
+            style='Ghost.TButton'
         )
 
         today_btn.grid(
@@ -98,17 +102,17 @@ class StatisticsScreen(tk.Frame):
             sticky="e"
         )
 
-        divider_top = tk.Frame(
-            body,
-            height=1,
-            bg="#DDDDDD"
-        )
+        # divider_top = tk.Frame(
+        #     body,
+        #     height=1,
+        #     bg="#DDDDDD"
+        # )
 
-        divider_top.pack(
-            fill="x",
-            padx=10,
-            pady=(0, 10)
-        )
+        # divider_top.pack(
+        #     fill="x",
+        #     padx=10,
+        #     pady=(0, 10)
+        # )
 
         date_nav_row = tk.Frame(body)
         date_nav_row.pack(
@@ -117,12 +121,13 @@ class StatisticsScreen(tk.Frame):
             pady=(0, 10)
         )
 
-        prev_btn = tk.Button(
+        prev_btn = ttk.Button(
             date_nav_row,
             text="<",
             width=3,
             command=lambda:
-                self.move_date_window(-1)
+                self.move_date_window(-1),
+            style='Ghost.TButton'
         )
 
         prev_btn.pack(
@@ -137,12 +142,13 @@ class StatisticsScreen(tk.Frame):
             padx=6
         )
 
-        next_btn = tk.Button(
+        next_btn = ttk.Button(
             date_nav_row,
             text=">",
             width=3,
             command=lambda:
-                self.move_date_window(1)
+                self.move_date_window(1),
+            style='Ghost.TButton'
         )
 
         next_btn.pack(
@@ -249,12 +255,13 @@ class StatisticsScreen(tk.Frame):
 
         for item in visible_items:
 
-            btn = tk.Button(
+            btn = ttk.Button(
                 self.date_buttons_frame,
                 text=item["button_text"],
                 width=8,
                 command=lambda selected=item["date_str"]:
-                    self.on_date_click(selected)
+                    self.on_date_click(selected),
+                style='Date.TButton'
             )
 
             btn.pack(
@@ -315,15 +322,15 @@ class StatisticsScreen(tk.Frame):
         for date_str, btn in self.date_buttons.items():
 
             if date_str == self.selected_date_str:
-                btn.config(
-                    bg="#2E7D32",
-                    fg="white"
-                )
+                try:
+                    btn.configure(style='DateSelected.TButton')
+                except Exception:
+                    btn.config(bg="#2E7D32", fg="white")
             else:
-                btn.config(
-                    bg="SystemButtonFace",
-                    fg="black"
-                )
+                try:
+                    btn.configure(style='Date.TButton')
+                except Exception:
+                    btn.config(bg="SystemButtonFace", fg="black")
 
     def load_date_summary(
         self,

@@ -62,7 +62,7 @@ class MainScreen(tk.Frame):
 
         self.status_label = tk.Label(
             content,
-            text="🔵 대기중",
+            text="대기중",
             font=("맑은 고딕", 16)
         )
 
@@ -95,39 +95,44 @@ class MainScreen(tk.Frame):
             pady=10
         )
 
-        self.start_btn = tk.Button(
+        self.start_btn = ttk.Button(
             self.button_frame,
             text="작업 시작",
             width=15,
-            command=self.start_work
+            command=self.start_work,
+            style='Primary.TButton'
         )
 
-        self.pause_btn = tk.Button(
+        self.pause_btn = ttk.Button(
             self.button_frame,
             text="휴식 시작",
             width=15,
-            command=self.start_break
+            command=self.start_break,
+            style='Primary.TButton'
         )
 
-        self.resume_btn = tk.Button(
+        self.resume_btn = ttk.Button(
             self.button_frame,
             text="작업 재시작",
             width=15,
-            command=self.resume_work
+            command=self.resume_work,
+            style='Primary.TButton'
         )
 
-        self.stop_btn = tk.Button(
+        self.stop_btn = ttk.Button(
             self.button_frame,
             text="작업 종료",
             width=15,
-            command=self.stop_work
+            command=self.stop_work,
+            style='Danger.TButton'
         )
         
-        # 개발용 알림
-        test_alarm_btn = tk.Button(
+        # 개발용 알림버튼
+        test_alarm_btn = ttk.Button(
             content,
             text="알림 테스트",
-            command=self.test_break_alarm
+            command=self.test_break_alarm,
+            style='Ghost.TButton'
         )
 
         test_alarm_btn.pack(
@@ -207,7 +212,7 @@ class MainScreen(tk.Frame):
         )
 
         self.status_label.config(
-            text="🟢 작업중"
+            text="♪ 작업중 (~˘▾˘)~♫•*¨*•.¸¸♪"
         )
 
         self.update_buttons()
@@ -227,7 +232,7 @@ class MainScreen(tk.Frame):
         self.state = "BREAK"
 
         self.status_label.config(
-            text="☕ 휴식중"
+            text="☕ 휴식중 ☕"
         )
 
         self.update_buttons()
@@ -246,7 +251,7 @@ class MainScreen(tk.Frame):
         self.state = "WORKING"
 
         self.status_label.config(
-            text="🟢 작업중"
+            text="♪ 작업중 (~˘▾˘)~♫•*¨*•.¸¸♪"
         )
 
         self.update_buttons()
@@ -319,7 +324,7 @@ class MainScreen(tk.Frame):
         self.next_alarm_seconds = 0
 
         self.status_label.config(
-            text="🔵 대기중"
+            text="대기중"
         )
 
         self.timer_label.config(

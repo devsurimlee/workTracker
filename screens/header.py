@@ -11,8 +11,8 @@ def create_screen_header(
 
     header = tk.Frame(
         parent,
-        height=60,
-        bg="#FFF9C4"
+        height=84,
+        # bg="white"
     )
 
     header.pack(
@@ -41,10 +41,11 @@ def create_screen_header(
     title_label = tk.Label(
         header,
         text=title,
-        bg="#FFF9C4",
+        # bg="white",
         font=(
             "맑은 고딕",
-            18
+            20,
+            "bold"
         )
     )
 
@@ -58,14 +59,22 @@ def create_screen_header(
 
     if right_text and right_command:
 
-        right_button = tk.Button(
-            header,
-            text=right_text,
-            width=right_width,
-            bg="#FFF9C4",
-            activebackground="#FFF9C4",
-            command=right_command
-        )
+        try:
+            import tkinter.ttk as ttk
+
+            right_button = ttk.Button(
+                header,
+                text=right_text,
+                width=right_width,
+                command=right_command
+            )
+        except Exception:
+            right_button = tk.Button(
+                header,
+                text=right_text,
+                width=right_width,
+                command=right_command
+            )
 
         right_button.grid(
             row=0,

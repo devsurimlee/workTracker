@@ -24,7 +24,8 @@ def create_centered_content(parent):
 
     centered.grid(
         row=0,
-        column=0
+        column=0,
+        sticky="ew",
     )
 
     return centered

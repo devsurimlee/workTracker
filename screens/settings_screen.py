@@ -47,7 +47,10 @@ class SettingsScreen(tk.Frame):
 
         menu_column = tk.Frame(content)
 
-        menu_column.pack()
+        menu_column.pack(
+            fill="x",
+            expand=True,
+        )
 
         self.create_menu_item(
             menu_column,
@@ -76,23 +79,22 @@ class SettingsScreen(tk.Frame):
 
         row = tk.Frame(
             parent,
-            height=50
+            height=50,
+            # bg="red",
         )
 
         row.pack(
-            fill="x"
+            fill="x",
+            expand=True,
         )
 
-        btn = tk.Button(
+        from tkinter import ttk
+
+        btn = ttk.Button(
             row,
             text=text,
-            relief="flat",
-            anchor="w",
-            font=(
-                "맑은 고딕",
-                12
-            ),
-            command=command
+            command=command,
+            style='Menu.TButton',
         )
 
         btn.pack(

@@ -2,8 +2,21 @@ import tkinter as tk
 from tkinter import font as tkfont
 
 
-BASE_WINDOW_WIDTH = 480
-BASE_WINDOW_HEIGHT = 700
+BASE_WINDOW_WIDTH = 520
+BASE_WINDOW_HEIGHT = 500
+
+# Color palette (iOS-like)
+PRIMARY = '#007AFF'
+PRIMARY_ACTIVE = '#0051A8'
+SECONDARY_BG = '#F2F2F7'
+SECONDARY_FG = '#000000'
+GHOST_BG = 'white'
+DANGER = '#FF3B30'
+DANGER_ACTIVE = '#CC2922'
+DATE_SELECTED = PRIMARY
+GRAY = '#8E8E93'
+GRAY_LIGHT = '#C7C7CC'
+
 
 FONT_SPECS = {
     "header_title": {
@@ -52,6 +65,88 @@ def create_fonts(root):
         )
 
     return fonts
+
+
+def apply_theme(root):
+    """Apply a simple iOS-like theme using ttk styles and default fonts."""
+
+    import tkinter.ttk as ttk
+
+    fonts = create_fonts(root)
+
+    # save fonts for other modules
+    root._app_fonts = fonts
+
+    # set default fonts for widgets
+    root.option_add("*Font", fonts["body"])
+    root.option_add("*Label.Font", fonts["body"])
+    root.option_add("*Button.Font", fonts["body"])
+
+    style = ttk.Style(root)
+
+    try:
+        style.theme_use('clam')
+    except Exception:
+        pass
+
+    # # Color palette (iOS-like)
+    # PRIMARY = '#007AFF'
+    # PRIMARY_ACTIVE = '#0051A8'
+    # SECONDARY_BG = '#F2F2F7'
+    # SECONDARY_FG = '#000000'
+    # GHOST_BG = 'white'
+    # DANGER = '#FF3B30'
+    # DANGER_ACTIVE = '#CC2922'
+    # DATE_SELECTED = PRIMARY
+
+    # Primary button
+    style.configure(
+        'Primary.TButton',
+        background=PRIMARY,
+        foreground='white',
+        padding=8,
+        relief='flat'
+    )
+    style.map('Primary.TButton', background=[('active', PRIMARY_ACTIVE)])
+
+    # Secondary (filled light) button
+    style.configure(
+        'Secondary.TButton',
+        background=SECONDARY_BG,
+        foreground=SECONDARY_FG,
+        padding=8,
+        relief='flat'
+    )
+
+    # Ghost / link style (white background or minimal)
+    style.configure(
+        'Ghost.TButton',
+        background=GHOST_BG,
+        foreground=PRIMARY,
+        padding=6,
+        relief='flat',
+    )
+
+    # Date buttons (normal / selected)
+    style.configure('Date.TButton', padding=6, relief='solid', background=SECONDARY_BG, foreground=SECONDARY_FG)
+    style.configure('DateSelected.TButton', padding=6, relief='flat', background=PRIMARY, foreground='white')
+
+    style.map('DateSelected.TButton', background=[('active', PRIMARY_ACTIVE)])
+
+
+    # Menu-style full-width button
+    style.configure('Menu.TButton', padding=10, relief='flat')
+
+    # Danger button
+    style.configure('Danger.TButton', background=DANGER, foreground='white', padding=8, relief='flat')
+    style.map('Danger.TButton', background=[('active', DANGER_ACTIVE)])
+
+
+    # Header label style
+    style.configure('Header.TLabel', font=fonts['header_title'])
+
+    # Make default frame/background light
+    root.configure(bg='white')
 
 
 def scale_fonts(fonts, scale):
