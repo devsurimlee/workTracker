@@ -80,3 +80,87 @@ class IosToggleButton(tk.Canvas):
     def set_state(self, state):
         self.is_on = state
         self.draw_widget()
+
+
+
+class IosStepper(tk.Frame):
+    def __init__(self, parent, textvariable, from_=1, to=300, step=1, **kwargs):
+        super().__init__(parent, bg=parent.cget("bg"), **kwargs)
+        
+        self.var = textvariable
+        self.from_ = from_
+        self.to = to
+        self.step = step
+
+        # iOS 감성 테마 색상 설정
+        self.bg_normal = "#E9E9EA"  # 기본 배경색
+        self.bg_hover = "#D1D1D6"   # 마우스 오버 시 배경색
+        btn_fg = theme.PRIMARY          # iOS 블루
+        
+        container = tk.Frame(self, bg=self.bg_normal, padx=6, pady=4)
+        container.pack()
+
+        # 1. [ -5 ] 버튼
+        self.btn_minus_five = tk.Button(
+            container, text="－5", font=("맑은 고딕", 9, "bold"),
+            fg=btn_fg, bg=self.bg_normal, relief="flat", activebackground=theme.GRAY_LIGHT,
+            bd=0, width=3, command=lambda: self._change_value(-5), cursor="hand2"
+        )
+        self.btn_minus_five.pack(side="left", padx=(0, 2))
+
+        # 2. [ -1 ] 버튼
+        self.btn_minus_one = tk.Button(
+            container, text="－", font=("맑은 고딕", 10, "bold"),
+            fg=btn_fg, bg=self.bg_normal, relief="flat", activebackground=theme.GRAY_LIGHT,
+            bd=0, width=2, command=lambda: self._change_value(-self.step), cursor="hand2"
+        )
+        self.btn_minus_one.pack(side="left")
+
+        # 3. [ 숫자 표시 영역 ]
+        self.lbl_value = tk.Label(
+            container, textvariable=self.var, font=("맑은 고딕", 11, "bold"),
+            fg="#000000", bg=self.bg_normal, width=4, anchor="center"
+        )
+        self.lbl_value.pack(side="left", padx=6)
+
+        # 4. [ 1+ ] 버튼
+        self.btn_plus_one = tk.Button(
+            container, text="＋", font=("맑은 고딕", 10, "bold"),
+            fg=btn_fg, bg=self.bg_normal, relief="flat", activebackground=theme.GRAY_LIGHT,
+            bd=0, width=2, command=lambda: self._change_value(self.step), cursor="hand2"
+        )
+        self.btn_plus_one.pack(side="left")
+
+        # 5. [ 5+ ] 버튼
+        self.btn_plus_five = tk.Button(
+            container, text="5＋", font=("맑은 고딕", 9, "bold"),
+            fg=btn_fg, bg=self.bg_normal, relief="flat", activebackground=theme.GRAY_LIGHT,
+            bd=0, width=3, command=lambda: self._change_value(5), cursor="hand2"
+        )
+        self.btn_plus_five.pack(side="left", padx=(2, 0))
+
+        # 모든 버튼에 마우스 오버(Hover) 기능 등록
+        self._add_hover_effect(self.btn_minus_five)
+        self._add_hover_effect(self.btn_minus_one)
+        self._add_hover_effect(self.btn_plus_one)
+        self._add_hover_effect(self.btn_plus_five)
+
+    def _add_hover_effect(self, button):
+        """버튼에 마우스가 오갈 때 배경색을 바꿔주는 헬퍼 함수"""
+        button.bind("<Enter>", lambda e: button.config(bg=self.bg_hover))
+        button.bind("<Leave>", lambda e: button.config(bg=self.bg_normal))
+
+    def _change_value(self, amount):
+        try:
+            current_val = self.var.get()
+        except tk.TclError:
+            current_val = self.from_
+            
+        new_val = current_val + amount
+        
+        if new_val < self.from_:
+            new_val = self.from_
+        elif new_val > self.to:
+            new_val = self.to
+            
+        self.var.set(new_val)

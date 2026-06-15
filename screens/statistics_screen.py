@@ -42,7 +42,7 @@ class StatisticsScreen(tk.Frame):
         content = tk.Frame(self)
         content.pack(
             fill="both",
-            expand=True
+            expand=True,
         )
 
         body = tk.Frame(content)
@@ -51,28 +51,31 @@ class StatisticsScreen(tk.Frame):
             expand=True
         )
 
+        #
+        # 월 표시 헤더 영역 (수정된 파트)
+        #
         month_header = tk.Frame(body)
         month_header.pack(
             fill="x",
             padx=10,
-            pady=(10, 10)
+            pady=(10, 10),
         )
 
-        month_header.grid_columnconfigure(
-            0,
-            weight=1
+        # 1. 우측 끝에 배치될 Today 버튼을 먼저 팩(pack)합니다. (side="right")
+        today_btn = ttk.Button(
+            month_header,
+            text="Today",
+            width=8,
+            command=self.go_today,
+            style='Primary.TButton'
+        )
+        today_btn.pack(
+            side="right",
+            anchor="e"
         )
 
-        month_header.grid_columnconfigure(
-            1,
-            weight=0
-        )
-
-        month_header.grid_columnconfigure(
-            2,
-            weight=1
-        )
-
+        # 2. Today 버튼이 차지한 공간을 제외한 남은 영역의 정중앙에 레이블을 배치합니다.
+        # 버튼과의 대칭 비대칭 균형을 맞추기 위해 왼쪽 마진(padx)을 조율합니다.
         self.month_label = tk.Label(
             month_header,
             text="",
@@ -80,27 +83,17 @@ class StatisticsScreen(tk.Frame):
                 "맑은 고딕",
                 16,
                 "bold"
-            )
+            ),
+            anchor="center" # 글자 자체 정렬도 정중앙
+        )
+        self.month_label.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=(60, 0) # Today 버튼 너비(약 60px)만큼 왼쪽에 패딩을 주어 완전한 정중앙으로 밀어줍니다.
         )
 
-        self.month_label.grid(
-            row=0,
-            column=1
-        )
 
-        today_btn = ttk.Button(
-            month_header,
-            text="Today",
-            width=8,
-            command=self.go_today,
-            style='Ghost.TButton'
-        )
-
-        today_btn.grid(
-            row=0,
-            column=2,
-            sticky="e"
-        )
 
         # divider_top = tk.Frame(
         #     body,
@@ -345,7 +338,8 @@ class StatisticsScreen(tk.Frame):
         )
 
         self.month_label.config(
-            text=selected_dt.strftime("%Y년 %m월")
+            text=selected_dt.strftime("%Y년 %m월"),
+            anchor="center"
         )
 
         self.work_time_label.config(

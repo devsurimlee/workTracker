@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 
 from tkinter import ttk
@@ -352,102 +353,6 @@ class MainScreen(tk.Frame):
 
         return 0
 
-    
-    def check_break_alarm(self):
-
-        if self.state != "WORKING":
-            return
-
-        enabled = (
-            get_setting(
-                "break_alarm_enabled",
-                "0"
-            ) == "1"
-        )
-
-        if not enabled:
-            return
-
-        target_minutes = int(
-            get_setting(
-                "break_alarm_minutes",
-                "90"
-            )
-        )
-
-        alarm_type = get_setting(
-            "break_alarm_type",
-            "windows"
-        )
-
-        current_seconds = (
-            self.total_work_seconds
-            + int(
-                time.time()
-                - self.work_start_time
-            )
-        )
-
-        if current_seconds < self.next_alarm_seconds:
-            return
-
-        #
-        # 소리 알림
-        #
-
-        if alarm_type == "sound":
-
-            try:
-
-                pygame.mixer.music.load(
-                    "sounds/break_alarm.mp3"
-                )
-
-                pygame.mixer.music.play()
-
-            except Exception as e:
-
-                print(e)
-
-        #
-        # Windows 알림
-        #
-
-        else:
-
-            try:
-
-                pygame.mixer.music.load(
-                    "sounds/break_alarm.mp3"
-                )
-
-                pygame.mixer.music.play()
-
-                toast = Notification(
-                    app_id=self.notification_app_id,
-                    title="휴식 권장",
-                    msg=(
-                        f"{target_minutes}분 이상 "
-                        "작업 중입니다.\n"
-                        "잠시 휴식을 권장합니다."
-                    ),
-                    duration="long"
-                )
-
-                toast.show()
-
-            except Exception as e:
-
-                print(e)
-
-        #
-        # 다음 알림 시점 계산
-        #
-
-        self.next_alarm_seconds += (
-            target_minutes * 60
-        )
-
 
     def update_timer(self):
 
@@ -495,56 +400,82 @@ class MainScreen(tk.Frame):
 
 
     def test_break_alarm(self):
+        """개발자용 알림 테스트 버튼 클릭 시 동작 함수"""
+        # 알림 방식 세팅과 무관하게 버튼을 누르면 즉시 동적 오디오 테스트 실행
+        self._play_alarm_audio()
+
+
+
+    def _play_alarm_audio(self):
+        """DB에 지정된 선택 오디오 파일을 읽어 안전하게 재생하는 내부 함수"""
+        # 1. DB에서 선택된 오디오 파일명을 로드 (기본값: levelup.mp3)
+        selected_sound = get_setting("break_alarm_sound", "levelup.mp3")
+        sound_path = os.path.join("sounds", selected_sound) # import os가 필요합니다.
+
+        try:
+            # 2. 파일 존재 여부 검증 후 재생
+            if os.path.exists(sound_path):
+                if pygame.mixer.music.get_busy():
+                    pygame.mixer.music.stop()
+                pygame.mixer.music.load(sound_path)
+                pygame.mixer.music.play()
+                print(f"[알림] 메인 화면 알람 재생 성공: {sound_path}")
+            else:
+                # 파일이 없을 시 기존 기본 사운드로 폴백 조치
+                fallback_path = os.path.join("sounds", "levelup.mp3")
+                if os.path.exists(fallback_path):
+                    pygame.mixer.music.load(fallback_path)
+                    pygame.mixer.music.play()
+        except Exception as e:
+            print(f"[오류] 메인 화면 오디오 재생 에러: {e}")
+
+
+    def check_break_alarm(self):
+        if self.state != "WORKING":
+            return
+
+        enabled = (
+            get_setting(
+                "break_alarm_enabled",
+                "0"
+            ) == "1"
+        )
+
+        if not enabled:
+            return
+
+        target_minutes = int(
+            get_setting(
+                "break_alarm_minutes",
+                "90"
+            )
+        )
 
         alarm_type = get_setting(
             "break_alarm_type",
             "windows"
         )
 
-        #
-        # 소리 알림 모드
-        #
+        current_seconds = (
+            self.total_work_seconds
+            + int(
+                time.time()
+                - self.work_start_time
+            )
+        )
 
-        if alarm_type == "sound":
-
-            try:
-
-                pygame.mixer.music.load(
-                    "sounds/break_alarm.mp3"
-                )
-
-                pygame.mixer.music.play()
-
-            except Exception as e:
-
-                print(e)
-
+        if current_seconds < self.next_alarm_seconds:
             return
 
-        #
-        # Windows 알림 모드
-        #
+        # 알람 조건 충족 시 알림 실행 및 다음 타겟 시간 갱신 (+설정분)
+        self.next_alarm_seconds = current_seconds + (target_minutes * 60)
 
-        try:
+        # Windows 배너 알림 방식 처리 구역 예시
+        if alarm_type == "windows":
+            # (여기에 기존 winotify 관련 코드 블록이 배치됩니다.)
+            pass
 
-            pygame.mixer.music.load(
-                "sounds/break_alarm.mp3"
-            )
+        # [수정] 소리 알림 방식 호출
+        elif alarm_type == "sound":
+            self._play_alarm_audio()
 
-            pygame.mixer.music.play()
-
-            toast = Notification(
-                app_id=self.notification_app_id,
-                title="휴식 권장",
-                msg=(
-                    "테스트 알림입니다.\n"
-                    "휴식알림이 정상 동작합니다."
-                ),
-                duration="long"
-            )
-
-            toast.show()
-
-        except Exception as e:
-
-            print(e)

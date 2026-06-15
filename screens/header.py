@@ -66,14 +66,16 @@ def create_screen_header(
                 header,
                 text=right_text,
                 width=right_width,
-                command=right_command
+                command=right_command,
+                style='Menu.TButton',
             )
         except Exception:
             right_button = tk.Button(
                 header,
                 text=right_text,
                 width=right_width,
-                command=right_command
+                command=right_command,
+                style='Menu.TButton',
             )
 
         right_button.grid(

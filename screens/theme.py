@@ -121,16 +121,15 @@ def apply_theme(root):
     # Ghost / link style (white background or minimal)
     style.configure(
         'Ghost.TButton',
-        background=GHOST_BG,
-        foreground=PRIMARY,
+        # background=GHOST_BG,
+        # foreground=PRIMARY,
         padding=6,
         relief='flat',
     )
 
     # Date buttons (normal / selected)
-    style.configure('Date.TButton', padding=6, relief='solid', background=SECONDARY_BG, foreground=SECONDARY_FG)
+    style.configure('Date.TButton', padding=6, relief='flat')
     style.configure('DateSelected.TButton', padding=6, relief='flat', background=PRIMARY, foreground='white')
-
     style.map('DateSelected.TButton', background=[('active', PRIMARY_ACTIVE)])
 
 

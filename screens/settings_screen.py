@@ -29,15 +29,15 @@ class SettingsScreen(tk.Frame):
                 )
         )
 
-        divider = tk.Frame(
-            self,
-            height=1,
-            bg="#CCCCCC"
-        )
+        # divider = tk.Frame(
+        #     self,
+        #     height=1,
+        #     bg="#CCCCCC"
+        # )
 
-        divider.pack(
-            fill="x"
-        )
+        # divider.pack(
+        #     fill="x"
+        # )
 
         #
         # 스크롤 영역
