@@ -1,6 +1,10 @@
 
 # .gitignore
 
+/build/
+/dist/
 **/__pycache__/
 **.pyc
 **.db
+**.log
+**.spec

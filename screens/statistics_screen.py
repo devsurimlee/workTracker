@@ -51,9 +51,7 @@ class StatisticsScreen(tk.Frame):
             expand=True
         )
 
-        #
-        # 월 표시 헤더 영역 (수정된 파트)
-        #
+        # 월 표시 헤더 영역
         month_header = tk.Frame(body)
         month_header.pack(
             fill="x",
@@ -61,7 +59,7 @@ class StatisticsScreen(tk.Frame):
             pady=(10, 10),
         )
 
-        # 1. 우측 끝에 배치될 Today 버튼을 먼저 팩(pack)합니다. (side="right")
+        # 1. 우측 끝에 배치될 Today 버튼을 먼저 팩(pack) (side="right")
         today_btn = ttk.Button(
             month_header,
             text="Today",
@@ -74,8 +72,8 @@ class StatisticsScreen(tk.Frame):
             anchor="e"
         )
 
-        # 2. Today 버튼이 차지한 공간을 제외한 남은 영역의 정중앙에 레이블을 배치합니다.
-        # 버튼과의 대칭 비대칭 균형을 맞추기 위해 왼쪽 마진(padx)을 조율합니다.
+        # 2. Today 버튼이 차지한 공간을 제외한 남은 영역의 정중앙에 레이블을 배치
+        # 버튼과의 대칭 비대칭 균형을 맞추기 위해 왼쪽 마진(padx)을 조율
         self.month_label = tk.Label(
             month_header,
             text="",
@@ -84,15 +82,14 @@ class StatisticsScreen(tk.Frame):
                 16,
                 "bold"
             ),
-            anchor="center" # 글자 자체 정렬도 정중앙
+            anchor="center"
         )
         self.month_label.pack(
             side="left",
             fill="x",
             expand=True,
-            padx=(60, 0) # Today 버튼 너비(약 60px)만큼 왼쪽에 패딩을 주어 완전한 정중앙으로 밀어줍니다.
+            padx=(60, 0)
         )
-
 
 
         # divider_top = tk.Frame(

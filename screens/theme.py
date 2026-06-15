@@ -2,10 +2,11 @@ import tkinter as tk
 from tkinter import font as tkfont
 
 
+# 디폴트 프로그램 크기
 BASE_WINDOW_WIDTH = 520
 BASE_WINDOW_HEIGHT = 500
 
-# Color palette (iOS-like)
+# 테마 색상
 PRIMARY = '#007AFF'
 PRIMARY_ACTIVE = '#0051A8'
 SECONDARY_BG = '#F2F2F7'
@@ -52,7 +53,6 @@ FONT_SPECS = {
 
 
 def create_fonts(root):
-
     fonts = {}
 
     for name, spec in FONT_SPECS.items():
@@ -88,16 +88,6 @@ def apply_theme(root):
         style.theme_use('clam')
     except Exception:
         pass
-
-    # # Color palette (iOS-like)
-    # PRIMARY = '#007AFF'
-    # PRIMARY_ACTIVE = '#0051A8'
-    # SECONDARY_BG = '#F2F2F7'
-    # SECONDARY_FG = '#000000'
-    # GHOST_BG = 'white'
-    # DANGER = '#FF3B30'
-    # DANGER_ACTIVE = '#CC2922'
-    # DATE_SELECTED = PRIMARY
 
     # Primary button
     style.configure(

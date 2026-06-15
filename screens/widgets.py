@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk, ImageDraw
 from screens import theme
 
+# iOS 스타일의 토글 버튼
 class IosToggleButton(tk.Canvas):
     def __init__(self, parent, command=None, width=50, height=28, **kwargs):
         super().__init__(parent, width=width, height=height, highlightthickness=0, **kwargs)
@@ -83,6 +84,7 @@ class IosToggleButton(tk.Canvas):
 
 
 
+# iOS 스타일의 스테퍼(숫자 증가/감소 버튼)
 class IosStepper(tk.Frame):
     def __init__(self, parent, textvariable, from_=1, to=300, step=1, **kwargs):
         super().__init__(parent, bg=parent.cget("bg"), **kwargs)

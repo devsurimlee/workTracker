@@ -106,16 +106,16 @@ class BreakAlarmScreen(tk.Frame):
             right_command=self._on_back_click
         )
 
-        # 1. 내용을 담을 빈 캔버스를 생성하고 마우스 휠 이벤트를 연결합니다.
+        # 1. 내용을 담을 빈 캔버스를 생성하고 마우스 휠 이벤트를 연결
         self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0, bg=self.cget("bg"))
         self.canvas.pack(side="left", fill="both", expand=True)
         self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
 
-        # 2. 캔버스 내부에 실제 위젯들이 가득 들어찰 content 프레임을 생성합니다.
+        # 2. 캔버스 내부에 실제 위젯들이 가득 들어찰 content 프레임을 생성
         content = tk.Frame(self.canvas, bg=self.cget("bg"))
         self.canvas_window = self.canvas.create_window((0, 0), window=content, anchor="nw")
 
-        # 3. 항목이 늘어나는 만큼 스크롤 범위를 갱신하고 가로 폭을 꽉 채우도록 설정합니다.
+        # 3. 항목이 늘어나는 만큼 스크롤 범위를 갱신하고 가로 폭을 꽉 채우도록 설정
         content.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
         self.canvas.bind("<Configure>", lambda e: self.canvas.itemconfig(self.canvas_window, width=e.width))
 
@@ -147,7 +147,7 @@ class BreakAlarmScreen(tk.Frame):
             )
         )
 
-        # [이 코드 추가] DB에서 알림 소리 파일명 로드 (기본값: complete.mp3)
+        # DB에서 알림 소리 파일명 로드 (기본값: complete.mp3)
         self.alarm_sound_var = tk.StringVar(
             value=get_setting(
                 "break_alarm_sound",
@@ -155,10 +155,7 @@ class BreakAlarmScreen(tk.Frame):
             )
         )
 
-        #
         # 휴식알림 사용
-        #
-
         section1 = tk.Frame(
             content
         )
@@ -211,7 +208,7 @@ class BreakAlarmScreen(tk.Frame):
         ToolTip(
             help_btn,
             "연속 작업 시간이 설정값을 넘으면\n"
-            "휴식을 권장하는 알림을 표시합니다.\n\n"
+            "휴식을 권장하는 알림을 표시\n\n"
             "예)\n"
             "90분 설정 → 90분 마다 알림\n"
         )
@@ -377,14 +374,14 @@ class BreakAlarmScreen(tk.Frame):
             tk.Label(no_sound_card, text="sounds/ 폴더에 mp3 파일이 없습니다.", font=("맑은 고딕", 10), bg="#FFFFFF", fg="gray").pack(side="left", padx=15)
         else:
             for index, filename in enumerate(mp3_files):
-                # [수정] 파일명에서 확장자(.mp3)를 제외한 순수 이름만 추출합니다.
+                # [수정] 파일명에서 확장자(.mp3)를 제외한 순수 이름만 추출
                 display_name = os.path.splitext(filename)[0]
 
                 row_card = tk.Frame(sound_container, bg="#FFFFFF", height=45, cursor="hand2")
                 row_card.pack(fill="x", pady=1 if index > 0 else 0) 
                 row_card.pack_propagate(False)
 
-                # [수정] text 속성에 filename 대신 display_name을 대입합니다.
+                # [수정] text 속성에 filename 대신 display_name을 대입
                 lbl = tk.Label(row_card, text=display_name, font=("맑은 고딕", 11), bg="#FFFFFF", fg="#000000")
                 lbl.pack(side="left", padx=15)
 
@@ -472,7 +469,7 @@ class BreakAlarmScreen(tk.Frame):
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.stop()
 
-            # 2. 선택한 mp3 파일을 로드하여 1회 재생합니다.
+            # 2. 선택한 mp3 파일을 로드하여 1회 재생
             if os.path.exists(sound_path):
                 pygame.mixer.music.load(sound_path)
                 pygame.mixer.music.play()

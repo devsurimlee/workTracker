@@ -400,7 +400,7 @@ class MainScreen(tk.Frame):
 
     def test_break_alarm(self):
         """개발자용 알림 테스트 버튼 클릭 시 동작 함수"""
-        # 알림 세팅 방식(windows/sound)에 맞춰 실제 알람 동작을 똑같이 테스트합니다.
+        # 알림 세팅 방식(windows/sound)에 맞춰 실제 알람 동작을 똑같이 테스트
         alarm_type = get_setting("break_alarm_type", "windows")
         target_minutes = get_setting("break_alarm_minutes", "90")
 
@@ -522,12 +522,9 @@ class MainScreen(tk.Frame):
         # 알람 조건 충족 시 알림 실행 및 다음 타겟 시간 갱신 (+설정분)
         self.next_alarm_seconds = current_seconds + (target_minutes * 60)
 
-        # Windows 배너 알림 방식 처리 구역 예시
         if alarm_type == "windows":
-            # (여기에 기존 winotify 관련 코드 블록이 배치됩니다.)
             pass
 
-        # [수정] 소리 알림 방식 호출
         elif alarm_type == "sound":
             self._play_alarm_audio()
 

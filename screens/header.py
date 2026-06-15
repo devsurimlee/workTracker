@@ -12,7 +12,6 @@ def create_screen_header(
     header = tk.Frame(
         parent,
         height=84,
-        # bg="white"
     )
 
     header.pack(

@@ -15,9 +15,7 @@ class SettingsScreen(tk.Frame):
 
         self.controller = controller
 
-        #
         # 상단 고정 영역
-        #
         
         create_screen_header(
             self,
@@ -80,7 +78,6 @@ class SettingsScreen(tk.Frame):
         row = tk.Frame(
             parent,
             height=50,
-            # bg="red",
         )
 
         row.pack(
